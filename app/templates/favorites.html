@@ -1,0 +1,50 @@
+<!-- app/templates/favorites.html -->
+
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">Your Favorites</h1>
+    <a href="{{ url_for('home') }}" class="back-to-home-btn">Back to Home</a>
+
+    <div class="favorites-list">
+        {% for term, details in favorites.items() %}
+            <div class="favorite-item">
+                <h3>{{ term.title() }}</h3>
+                <p><strong>Definition:</strong> {{ details.definition }}</p>
+                <p><strong>Related Terms:</strong> 
+                    {% if details.related_terms %}
+                        {{ details.related_terms | join(', ') }}
+                    {% else %}
+                        No related terms available.
+                    {% endif %}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .back-to-home-btn {
+        background-color: #0044cc;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .back-to-home-btn:hover {
+        background-color: #0033aa;
+    }
+    .favorite-item {
+        background-color: #f9f9f9;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .favorite-item h3 {
+        color: #0044cc;
+    }
+</style>
+{% endblock %}

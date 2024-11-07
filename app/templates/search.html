@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">Medical Terms Dictionary</h1>
+    
+    <form action="{{ url_for('search') }}" method="get" id="search-form">
+        <input type="text" id="search-term" name="term" placeholder="Enter medical term" autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="result">
+        {% if result_definition %}
+            <h2>{{ message }}</h2>
+            <div class="term-section">
+                <h3 class="term-heading">Term:</h3>
+                <p>{{ term }}</p>
+                <button class="favorite-btn" onclick="addToFavorites('{{ term }}')">Add to Favorites</button>
+            </div>
+            
+            <div class="definition-section">
+                <h3 class="definition-heading">Definition:</h3>
+                <p>{{ result_definition }}</p>
+            </div>
+        {% else %}
+            <h2>{{ message }}</h2>
+        {% endif %}
+
+        {% if related_terms %}
+            <div class="related-section">
+                <h3 class="related-heading">Related Terms:</h3>
+                <ul>
+                    {% for related in related_terms %}
+                        <li>{{ related }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="suggestions" class="suggestions"></div>
+
+    <a href="{{ url_for('favorites') }}" class="view-favorites-link">View Favorites</a>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#search-term').on('input', function() {
+            let query = $(this).val();
+            if (query.length > 1) {
+                $.getJSON("{{ url_for('autocomplete') }}", { q: query }, function(data) {
+                    $('#suggestions').empty();
+                    data.forEach(function(item) {
+                        $('#suggestions').append(`<div class="suggestion-item">${item}</div>`);
+                    });
+                });
+            } else {
+                $('#suggestions').empty();
+            }
+        });
+
+        $(document).on('click', '.suggestion-item', function() {
+            $('#search-term').val($(this).text());
+            $('#search-form').submit();
+        });
+    });
+
+    function addToFavorites(term) {
+        $.post("{{ url_for('add_to_favorites') }}", { term: term }, function(data) {
+            alert(data.message);
+        });
+    }
+</script>
+
+<style>
+    body {
+        background-color: #f7f9fc;
+        font-family: Arial, sans-serif;
+        color: #333;
+        padding: 0;
+        margin: 0;
+    }
+    .container {
+        width: 80%;
+        max-width: 1200px;
+        padding: 40px;
+        margin-top: 50px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .title {
+        color: #0044cc;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+    #search-form {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+    #search-term {
+        width: 70%;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #0044cc;
+        border-radius: 5px;
+    }
+    button {
+        padding: 12px 20px;
+        background-color: #0044cc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    button:hover {
+        background-color: #0033aa;
+    }
+    .result h2 {
+        color: #0044cc;
+        font-size: 24px;
+    }
+    .term-section, .definition-section, .related-section {
+        margin-top: 20px;
+        text-align: left;
+    }
+    .term-heading, .definition-heading, .related-heading {
+        font-size: 20px;
+        color: #0044cc;
+        margin-bottom: 10px;
+    }
+    .favorite-btn {
+        background-color: #ffcb00;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .favorite-btn:hover {
+        background-color: #ff9900;
+    }
+    .view-favorites-link {
+        margin-top: 30px;
+        display: block;
+        color: #0044cc;
+        font-size: 18px;
+        text-decoration: none;
+    }
+    .suggestions .suggestion-item {
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .suggestions .suggestion-item:hover {
+        background-color: #e0e0e0;
+    }
+    .related-section ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .related-section li {
+        margin: 5px 0;
+    }
+</style>
+{% endblock %}
