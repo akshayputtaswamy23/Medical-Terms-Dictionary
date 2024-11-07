@@ -87,3 +87,11 @@ This will start the Flask development server. You can access the app at http://1
 ## **Additional Notes**
 **Error Handling:** Basic error handling is implemented in the app to handle cases where a term is not found or an invalid request is made.
 **Case Insensitive Search:** The search functionality is case-insensitive, meaning you can search for terms in any case.
+
+## Screenshots 
+<img width="1440" alt="Screenshot 2024-11-07 at 4 46 28 PM" src="https://github.com/user-attachments/assets/65370a14-120e-4a91-b279-45d5548f47bb">
+![Screenshot 2024-11-07 at 4 46 18 PM](https://github.com/user-attachments/assets/391fe2f5-cde9-4cc3-9662-142b8eca1a64)
+<img width="1440" alt="Screenshot 2024-11-07 at 4 46 11 PM" src="https://github.com/user-attachments/assets/d82ac3ea-ae72-4416-9bb4-5356bf35127a">
+<img width="1440" alt="Screenshot 2024-11-07 at 4 46 06 PM" src="https://github.com/user-attachments/assets/fd6cfcb6-e934-4440-bbca-f2b567ee3910">
+<img width="1440" alt="Screenshot 2024-11-07 at 4 45 57 PM" src="https://github.com/user-attachments/assets/e7449e80-174e-4d5d-9f1c-9dd69e4c899f">
+
